@@ -501,6 +501,7 @@ function play(playlist){
 			attributes['data-start']=response.time_start;
 			if(response.asset.source==1)attributes['data-asset']='youtube';
 			else if(response.asset.source==3)attributes['data-asset']='twitch';
+			attributes['data-resource']=response.asset.resource_id;
 	
 			swfobject.embedSWF("http://www-cdn.jtvnw.net/swflibs/TwitchPlayer.swf",
 				id,
@@ -511,8 +512,6 @@ function play(playlist){
 				{"eventsCallback":"function(e){onPlayerEvent(e,'"+id+"')}","embed":1,"videoId":response.asset.resource_id,"auto_play":"true"},
 				{"allowScriptAccess":"always","allowFullScreen":"true"},
 				attributes);
-			
-			$('#'+id).attr('data-ready',true);
 		}
 		
 		$(container).click(function(e){
