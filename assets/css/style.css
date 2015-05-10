@@ -1,6 +1,7 @@
 body{
 	font-family: 'Helvetica Neue', 'Lucida Grande', sans-serif;
 	font-size: 75%;
+	margin:0px;
 }
 .moment_container{
 	position: relative;

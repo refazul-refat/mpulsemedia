@@ -10,6 +10,239 @@ function makeId(){
 
 	return text;
 }
+Twitch=function(id){
+	this.id=id;
+};
+Twitch.prototype.getResourceId=function(){
+	return $('#'+this.id).attr('data-resource');
+};
+Twitch.prototype.getTitle=function(){
+	return this.title;
+};
+Twitch.prototype.getPublisher=function(){
+	return this.publisher;
+};
+Twitch.prototype.getDuration=function(){
+	return this.duration;
+};
+Twitch.prototype.getThumbnail=function(){
+	return this.thumbnail;
+};
+Twitch.prototype.getThumbnailAt=function(time,w,h){
+	return this.thumbnail;
+};
+Twitch.prototype.seekTo=function(time){
+	var that=this;
+	$('#'+that.id)[0].videoSeek(time);
+};
+Twitch.prototype.getSource=function(){
+	return 'twitch';
+};
+Twitch.prototype.getTarget=function(){
+	return $('#'+this.id);
+};
+Twitch.prototype.init=function(callback){
+	var that=this;
+	if(that.isReady()){callback();return;}
+	$.ajax({
+		dataType: "jsonp",
+		method:'GET',
+		url: 'https://api.twitch.tv/kraken/videos/'+that.getResourceId(),
+		success: function(response){
+			that.title=response.title;
+			that.publisher=response.channel.display_name;
+			that.resource_id=response._id;
+			that.duration=parseInt(response.length,10);
+			that.thumbnail=response.preview;
+			
+			var t=setInterval(function(){
+				if(that.getTarget()){
+					clearInterval(t);
+					console.log('--Twitch Ready--');
+					$('#'+that.id).attr('data-ready',true);
+					callback();
+				}
+			},1000);
+		}
+	});
+};
+Twitch.prototype.isReady=function(){
+	return $('#'+this.id).attr('data-ready')=='true'?true:false;
+};
+Twitch.prototype.play=function(){
+	$('#'+this.id)[0].playVideo();
+};
+Twitch.prototype.pause=function(){
+	$('#'+this.id)[0].pauseVideo();
+};
+Twitch.prototype.getCurrentTime=function(){
+	return $('#'+this.id)[0].getVideoTime();
+};
+Youtube=function(id){
+	this.id=id;
+	this.player=YT.get(id);
+};
+Youtube.prototype.getResourceId=function(){
+	return $('#'+this.id).attr('data-resource');
+};
+Youtube.prototype.getTitle=function(){
+	return this.player.getVideoData().title;
+};
+Youtube.prototype.getPublisher=function(){
+	return this.player.getVideoData().author;
+};
+Youtube.prototype.getDuration=function(){
+	return this.player.getDuration();
+};
+Youtube.prototype.getThumbnail=function(){
+	return 'http://img.youtube.com/vi/'+this.getResourceId()+'/default.jpg';
+};
+Youtube.prototype.getThumbnailAt=function(time,w,h){
+	var storyboard=$('#'+this.id).attr('data-storyboard_spec');
+	var seconds=this.getDuration();
+	try{
+		var thumb={};
+		var array=storyboard.split('|');
+
+		thumb.url=array[0].replace('$L',array.length-2);
+
+		var best=array.reverse()[0];
+		var tokens=best.split('#');
+
+		thumb.width=parseInt(tokens[0],10);
+		thumb.height=parseInt(tokens[1],10);
+		thumb.total=parseInt(tokens[2]);
+		thumb.gridX=parseInt(tokens[3]);
+		thumb.gridY=parseInt(tokens[4]);
+		//var thumb.unknown=tokens[5];
+		thumb.name=tokens[6];
+		thumb.sigh=tokens[7];
+
+		thumb.totalseconds=parseInt(seconds,10);
+		this.thumb=thumb;
+		//console.log(this.thumb);
+		
+		time=parseInt(time,10);
+
+		var per=Math.ceil(this.thumb.totalseconds/this.thumb.total);
+		var thumb=Math.floor((time/per)+1);
+
+		var sheet=Math.floor(thumb/(this.thumb.gridX*this.thumb.gridY));
+		var pos=(thumb%(this.thumb.gridX*this.thumb.gridY));
+
+		var col=(pos%this.thumb.gridY);
+		if(col<0)col=0;
+
+		var row=Math.floor(pos/(this.thumb.gridX));
+		if(row<0)row=0;
+
+		//console.log(per,thumb,sheet,pos,col,row);
+
+		var object={};object.style={};
+		var url=this.thumb.url;
+		url=url.replace('$N','M'+sheet)+'?sigh='+this.thumb.sigh;
+
+		object.url=url;
+		object.width=this.thumb.width;
+		object.height=this.thumb.height;
+		object.row=row;
+		object.col=col;
+
+		/* General
+		object.style.width=this.thumb.width+'px';
+		object.style.height=this.thumb.height+'px';
+		object.style.backgroundImage='url('+url+')';
+		object.style.backgroundPosition='-'+(col*this.thumb.width)+'px -'+(row*this.thumb.height)+'px';
+		*/
+
+		/* Fixed to 100x75 */
+		object.style.width=w+'px';
+		object.style.height=h+'px';
+		object.style.backgroundImage='url('+url+')';
+		object.style.backgroundPosition='-'+(col*w)+'px -'+(row*h)+'px';
+		object.style.backgroundSize=(this.thumb.gridX*100)+'% '+(this.thumb.gridY*100)+'%';
+
+		// Last page fix
+		if(Math.floor(this.thumb.total/(this.thumb.gridX*this.thumb.gridY))==sheet){
+
+			var lptotal=this.thumb.total%(this.thumb.gridX*this.thumb.gridY);
+			var lpcolumn=Math.ceil(lptotal/this.thumb.gridY);
+			object.style.backgroundSize=(this.thumb.gridX*100)+'% '+(lpcolumn*100)+'%';
+		}
+		//console.log(object);
+		return object;
+
+		/* Sample object
+		object = {
+			url		:	https://i.ytimg.com/sb/idLyobOhtO4/storyboard3_L2/M3.jpg,
+			width	:	160,
+			height	:	90,
+			row		:	2,
+			col		:	3,
+			style:	:	{
+							width				:	100px,
+							height				:	75px,
+							backgroundImage		:	url(https://i.ytimg.com/sb/MYP56QJpDr4/storyboard3_L2/M12.jpg?sigh=ZMDkkLACxYvP3ntjQguILtK5hfQ),
+							backgroundPosition	:	-100px -225px,
+							backgroundSize		:	500% 500%
+						}
+		}
+		*/
+
+		/* Measure Performance ~ Maximum 1 frame shift from youtube
+		var test=document.getElementById('thumbtest');
+		test.style.width=object.style.width;
+		test.style.height=object.style.height;
+		test.style.backgroundImage=object.style.backgroundImage;
+		test.style.backgroundPosition=object.style.backgroundPosition;
+		test.style.backgroundSize=object.style.backgroundSize;
+		*/
+
+	}
+	catch(err){
+		console.log('---Unable to parse storyboard spec---');
+		return false;
+	}
+};
+Youtube.prototype.seekTo=function(time){
+	return this.player.seekTo(time);
+};
+Youtube.prototype.getSource=function(){
+	return 'youtube';
+};
+Youtube.prototype.getTarget=function(){
+	return $('#'+this.id);
+};
+Youtube.prototype.init=function(callback){
+	var that=this;
+	if(that.isReady()){callback();return;}
+	//storyboard_spec 2nd attempt #see onYouTubePlayerAPIReady()
+	$.ajax({
+		url:'assist?video_id='+that.getResourceId(),
+		dataType:'json',
+		method:'GET',
+		statusCode:{
+			200:function(data){
+				that.storyboard_spec=decodeURIComponent((/&storyboard_spec=(.*?)&/.exec(data.responseText) || [])[1]);
+				$('#'+that.id).attr('data-ready',true);
+				$('#'+that.id).attr('data-storyboard_spec',that.storyboard_spec);
+				callback();
+			}
+		}
+	});
+};
+Youtube.prototype.isReady=function(){
+	return $('#'+this.id).attr('data-ready')=='true'?true:false;
+};
+Youtube.prototype.play=function(){
+	this.player.playVideo();
+};
+Youtube.prototype.pause=function(){
+	this.player.pauseVideo();
+};
+Youtube.prototype.getCurrentTime=function(){
+	return this.player.getCurrentTime();
+};
 Playlist={
 	load:function(object,callback){
 		var auid=object.auid;
@@ -122,6 +355,25 @@ Moment={
 			$(m).appendTo(container);
 			$('.p-container').remove();
 			$(container).appendTo($('body'));
+			
+			$(container).append($('<div>',{class:'moment_button'}).text('#moment').click(function(event){
+				event.stopPropagation();
+				var target=$(this).parent().children().first();
+				var t;
+				if($(target).attr('data-asset')=='twitch')
+					t=new Twitch($(target).attr('id'));
+				else if($(target).attr('data-asset')=='youtube')
+					t=new Youtube($(target).attr('id'));
+				console.log(t);
+				t.pause();
+				t.init(function(){
+					var tag=prompt("Enter Tag","");
+					if(tag!=null){
+						Moment.save(t,tag);
+					}
+					t.play();
+				});
+			}));
 		
 			if(response.asset.source==1){
 				$.ajax({
@@ -151,6 +403,9 @@ Moment={
 			else if(response.asset.source==3){
 				var attributes={};
 				attributes['data-start']=response.time_start;
+				if(response.asset.source==1)attributes['data-asset']='youtube';
+				else if(response.asset.source==3)attributes['data-asset']='twitch';
+				attributes['data-resource']=response.asset.resource_id;
 	
 				swfobject.embedSWF("http://www-cdn.jtvnw.net/swflibs/TwitchPlayer.swf",
 					id,
@@ -175,7 +430,10 @@ function onPlayerReadyPassive(event){
 }
 function onPlayerStateChangePassive(event,object){
 	if (event.data == YT.PlayerState.PLAYING) {
-		player.seekTo(parseInt($(object).attr('data-start'),10));
+		if($(event.target.c).attr('data-once')=='false' || $(event.target.c).attr('data-once')==undefined){
+			player.seekTo(parseInt($(object).attr('data-start'),10));
+			$(event.target.c).attr('data-once','true');
+		}
 	}
 }
 function onPlayerEvent(data,id){
@@ -241,6 +499,8 @@ function play(playlist){
 		else if(response.asset.source==3){
 			var attributes={};
 			attributes['data-start']=response.time_start;
+			if(response.asset.source==1)attributes['data-asset']='youtube';
+			else if(response.asset.source==3)attributes['data-asset']='twitch';
 	
 			swfobject.embedSWF("http://www-cdn.jtvnw.net/swflibs/TwitchPlayer.swf",
 				id,
