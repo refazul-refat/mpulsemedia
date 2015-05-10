@@ -6,6 +6,7 @@
 		<link rel='stylesheet' href='assets/css/style.css'/>
 		
 		<script type='text/javascript' src='assets/js/lib/jquery-2.1.3.min.js'></script>
+		<script type='text/javascript' src='assets/js/lib/swfobject.js'></script>
 	</head>
 	<body>
 		<a href='<?php echo base_url();?>'>Home</a>
