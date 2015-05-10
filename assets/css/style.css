@@ -1,0 +1,88 @@
+body{
+	font-family: 'Helvetica Neue', 'Lucida Grande', sans-serif;
+	font-size: 75%;
+}
+.moment_container{
+	position: relative;
+}
+.moment_button{
+	position: absolute;
+	display: inline-block;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	padding: 2px;
+	cursor: pointer;
+	z-index: 10000000;
+	transition: all 300ms;
+	color: #fff;
+	left: 50%;
+	bottom: 5px;
+}
+.moment_button.youtube{
+	position: absolute;
+	line-height: 7px;
+}
+.moment_button.twitch{
+	left: 55%;
+	position: relative;
+	font-size: 12px;
+	padding: 1px 2px;
+}
+.moment_button:hover{
+	background: #fff;
+	color: #222;
+}
+.moment_info{
+	display:none;
+}
+.button{
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: all 400ms;
+}
+.button:hover{
+	background-color: aliceblue;
+}
+.playlist{
+	border:1px dotted #ccc;
+	transition: all 400ms;
+}
+.playlist:hover{
+	background-color: aliceblue;
+	cursor: pointer;
+}
+.playlist .remove{
+	float:right;
+	padding: 0px 3px;
+	border-left: 1px dotted #ccc;
+	cursor: pointer;
+	transition: all 400ms;
+}
+.playlist .remove:hover{
+	background: #333;
+	color: #fff;
+}
+#cancel{
+	display:block;
+}
+.next-thumbnail{
+	position: fixed;
+	right: 12%;
+	bottom: 50px;
+	cursor: pointer;
+	background-color: #aaa;
+	width: 100px;
+	height: 100px;
+}
+.p-container{
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background: #000;
+}
+object,iframe{
+	margin-left: 10%;
+}
