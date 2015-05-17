@@ -5,7 +5,7 @@ $(document).ready(function(){
 			auid=$('#auid').text();
 			
 			$.ajax({
-				url:api_base+'moments/recently_created?auid='+auid,
+				url:api_base+'users/'+auid+'/moments/recently_created?token='+token,
 				method:'GET',
 				dataType:'json',
 				statusCode:{
