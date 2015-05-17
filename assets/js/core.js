@@ -427,6 +427,7 @@ Moment={
 	}
 };
 function onPlayerReadyPassive(event){
+	event.target.playVideo();
 }
 function onPlayerStateChangePassive(event,object){
 	if (event.data == YT.PlayerState.PLAYING) {
@@ -443,7 +444,7 @@ function onPlayerEvent(data,id){
 			if($(player).attr('data-start')){
 				player.videoSeek(parseInt($(player).attr('data-start'),10));
 			}
-			player.pauseVideo();
+			player.playVideo();
 		}
 	});
 };
