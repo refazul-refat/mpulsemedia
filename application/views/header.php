@@ -14,5 +14,12 @@
 		| <a href='recent'>Recently Created</a>
 		| <a href='playlist'>Playlist</a>
 		<br/>
+		<?php if($this->session->userdata('uid')):?>
+		<div style='float:right;'>Logged in as <?php echo $this->session->userdata('display_name');?></div>
+		<?php else:?>
+		<a href='signup'>Register</a>
+		<?php endif;?>
+		<!--
 		<a target='_blank' href='https://www.facebook.com/dialog/oauth?app_id=946381225384146&redirect_uri=http://dev.mpulsemedia.com/web/facebook/&scope=email,user_friends,public_profile'>Sign up using Facebook</a>
 		| <a target='_blank' href='https://accounts.google.com/o/oauth2/auth?scope=email%20profile&state=moment&redirect_uri=http%3A%2F%2Fdev.mpulsemedia.com%2Fweb%2Fgoogle%2F&response_type=code&client_id=856474361847-cveg7qql7bpnstvl48c5217usphcn76t.apps.googleusercontent.com'>Sign up using Google</a>
+		-->

@@ -14,7 +14,7 @@ class Authenticate extends CI_Controller {
 		if($this->input->get('token')){
 			$token=$this->base64url_decode(($this->input->get('token')));
 			$this->load->library('encrypt');
-			$key = 'shared-secret-key';
+			$key = 'shared-super-secret-key';
 			
 			$this->load->library('session');
 			$string = $this->encrypt->decode($token, $key);
@@ -22,6 +22,8 @@ class Authenticate extends CI_Controller {
 			if($parts[0]=='ok'){
 				$this->session->set_userdata('uid',$parts[1]);
 				$this->session->set_userdata('user',$parts[2]);
+				$this->session->set_userdata('display_name',$parts[3]);
+				$this->session->set_userdata('email',$parts[4]);
 			}
 		}
 		header('Location:'.base_url());
@@ -29,5 +31,5 @@ class Authenticate extends CI_Controller {
 	}
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file authenticate.php */
+/* Location: ./application/controllers/authenticate.php */

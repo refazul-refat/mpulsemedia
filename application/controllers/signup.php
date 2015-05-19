@@ -18,10 +18,10 @@ class Signup extends CI_Controller {
 		}
 
 		$data=array('cookie'=>$this->input->cookie('auid',TRUE));
-		$header=array('title'=>'Playlist');
+		$header=array('title'=>'Join the moment community');
 		
 		$this->load->view('header',$header);
-		$this->load->view('recent',$data);
+		$this->load->view('signup',$data);
 		$this->load->view('footer');
 	}
 }
