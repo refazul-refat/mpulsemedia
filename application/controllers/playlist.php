@@ -5,19 +5,20 @@ class Playlist extends CI_Controller {
 	{
 		$this->load->model('core');
 		
-		if($this->input->cookie('auid')!=''){
-			$cookie=$this->input->cookie('auid',TRUE);
+		if(!($this->input->cookie('auid',TRUE)==='' || $this->input->cookie('auid',TRUE)==='destroy')){
+			$auid=$this->input->cookie('auid',TRUE);
 		}
 		else{
+			$auid=$this->core->getRandomId(32);
 			$cookie = array(
 				'name'   => 'auid',
-				'value'  => $this->core->getRandomId(32),
+				'value'  => $auid,
 				'expire' => '31536000'
 			);
 			$this->input->set_cookie($cookie);
 		}
 
-		$data=array('cookie'=>$this->input->cookie('auid',TRUE));
+		$data=array('auid'=>$auid);
 		$header=array('title'=>'Playlist');
 		
 		$this->load->view('header',$header);

@@ -25,6 +25,15 @@ class Authenticate extends CI_Controller {
 				$this->session->set_userdata('display_name',$parts[3]);
 				$this->session->set_userdata('email',$parts[4]);
 			}
+			if($parts[5]){
+				$auid=$parts[5];
+				$cookie = array(
+					'name'   => 'auid',
+					'value'  => $auid,
+					'expire' => '31536000'
+				);
+				$this->input->set_cookie($cookie);
+			}
 		}
 		header('Location:'.base_url());
 		die();

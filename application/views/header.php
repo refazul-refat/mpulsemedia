@@ -16,8 +16,10 @@
 		<br/>
 		<?php if($this->session->userdata('uid')):?>
 		<div style='float:right;'>Logged in as <?php echo $this->session->userdata('display_name');?></div>
+		<div><a href='logout'>Logout</a></div>
 		<?php else:?>
 		<a href='signup'>Register</a>
+		| <a href='login'>Login</a>
 		<?php endif;?>
 		<!--
 		<a target='_blank' href='https://www.facebook.com/dialog/oauth?app_id=946381225384146&redirect_uri=http://dev.mpulsemedia.com/web/facebook/&scope=email,user_friends,public_profile'>Sign up using Facebook</a>

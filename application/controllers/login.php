@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class History extends CI_Controller {
+class Login extends CI_Controller {
 	public function index()
 	{
 		$this->load->model('core');
@@ -19,10 +19,10 @@ class History extends CI_Controller {
 		}
 
 		$data=array('auid'=>$auid);
-		$header=array('title'=>'History');
+		$header=array('title'=>'Join the moment community');
 		
 		$this->load->view('header',$header);
-		$this->load->view('history',$data);
+		$this->load->view('login',$data);
 		$this->load->view('footer');
 	}
 }
