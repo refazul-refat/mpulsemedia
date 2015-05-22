@@ -246,6 +246,8 @@ Youtube.prototype.getCurrentTime=function(){
 Playlist={
 	load:function(object,callback){
 		var auid=object.auid;
+		if($('#vuid').text())
+			auid=$('#vuid').text();
 		$.ajax({
 			url:api_base+'users/'+auid+'/playlists?token='+token,
 			method:'GET',
@@ -308,11 +310,15 @@ Moment={
 		});
 	},
 	play:function(mid){
+		var data={
+			mid:mid,
+			auid:auid
+		};
 		$.ajax({
 			dataType:'json',
 			method:'POST',
 			url:api_base+'play/moment',
-			data:{mid:mid,auid:auid},
+			data:data,
 			statusCode:{
 				200:function(response){
 					console.log(response);

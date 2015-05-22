@@ -1,8 +1,10 @@
 $(document).ready(function(){
 	var t=setInterval(function(){
-		if($('#auid').text()){
+		if($('.fallback').first().text()){
 			clearInterval(t);
-			auid=$('#auid').text();
+			auid=$('.fallback').first().text();
+			if($('#vuid').text())
+				auid=$('#vuid').text();
 			
 			Playlist.load({auid:auid},function(response){
 				for(var i=0;i<response.length;i++){
@@ -119,7 +121,7 @@ $(document).ready(function(){
 								$.ajax({
 									url:api_base+'playlists',
 									method:'POST',
-									data:{title:title,publisher_id:auid,moment_ids:moments,token:token,method:'rewrite',unique:'true',status_public:status_public},
+									data:{title:title,auid:auid,moment_ids:moments,token:token,method:'rewrite',unique:'true',status_public:status_public},
 									dataType:'json',
 									statusCode:{
 										201:function(response){

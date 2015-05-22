@@ -12,23 +12,10 @@ class Logout extends CI_Controller {
 	public function index()
 	{
 		$this->session->sess_destroy();
-		$cookie = array(
-			'name'   => 'auid',
-			'value'  => 'destroy',
-			'expire' => '31536000'
-		);
-		$this->input->set_cookie($cookie);
-		?>
-		<div id='auid' style='display:none;'>destroy</div>
-		<script type='text/javascript'>
-			setTimeout(function(){
-				window.location.replace('<?php echo base_url();?>');
-			},1500);
-		</script>
-		<?php
+		header('Location:'.base_url());
+		die();
 	}
 	public function passive(){
-		$this->session->sess_destroy();
 	}
 }
 

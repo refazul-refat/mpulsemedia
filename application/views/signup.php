@@ -4,8 +4,8 @@
 		Email : <input type='text' placeholder='Email' value='' autocomplete='off' name='email' id='email'/><br/>
 		Password : <input type='password' placeholder='password' value='' autocomplete='off' name='password' id='password'/><br/>
 		<input type='hidden' name='redirect' value="<?php echo base_url();?>"/>
-		<input type='hidden' name='auid' value="<?php echo $auid;?>"/>
+		<input type='hidden' name='fallback'/>
 		<input type='submit' value='Register'/>
 	</form>
-	<div id='auid' style='display:none;'><?php echo $auid;?></div>
 </div>
+<script type='text/javascript' src='assets/js/core.js'></script>

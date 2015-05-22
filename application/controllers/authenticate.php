@@ -24,19 +24,18 @@ class Authenticate extends CI_Controller {
 				$this->session->set_userdata('user',$parts[2]);
 				$this->session->set_userdata('display_name',$parts[3]);
 				$this->session->set_userdata('email',$parts[4]);
+				$this->session->set_userdata('vuid',$this->base64url_encode($this->base64url_encode($token)));
 			}
-			if($parts[5]){
-				$auid=$parts[5];
-				$cookie = array(
-					'name'   => 'auid',
-					'value'  => $auid,
-					'expire' => '31536000'
-				);
-				$this->input->set_cookie($cookie);
-			}
+			if($parts[5])
+				$this->session->set_userdata('vuid',$this->base64url_encode($this->base64url_encode($parts[5])));
 		}
 		header('Location:'.base_url());
 		die();
+	}
+	public function test(){
+		$double=$this->base64url_encode($this->base64url_encode('6u9HusPtoWwM9DYsGih6wSglXc9u+Zc/lAFfJ6V+FpaEA8VX8mPCRk05803HRCFmt43cvXazBWu5EeIgpy+R4A=='));
+		echo $double.'<br/>';
+		echo $this->base64url_decode($this->base64url_decode($double));
 	}
 }
 

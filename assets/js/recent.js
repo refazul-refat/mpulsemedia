@@ -1,8 +1,10 @@
 $(document).ready(function(){
 	var t=setInterval(function(){
-		if($('#auid').text()){
+		if($('.fallback').first().text()){
 			clearInterval(t);
-			auid=$('#auid').text();
+			auid=$('.fallback').first().text();
+			if($('#vuid').text())
+				auid=$('#vuid').text();
 			
 			$.ajax({
 				url:api_base+'users/'+auid+'/moments/recently_created?token='+token,
