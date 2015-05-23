@@ -311,7 +311,8 @@ Moment={
 	},
 	play:function(mid){
 		var data={
-			mid:mid,
+			object_id:mid,
+			object_type:'moment',
 			auid:auid
 		};
 		$.ajax({

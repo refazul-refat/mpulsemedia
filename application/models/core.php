@@ -13,4 +13,35 @@ class Core extends CI_Model {
 		}
 		return $randomString;
 	}
+    public function base64url_encode($s) {
+		return str_replace(array('+', '/', '='), array('-', '_', '.'), base64_encode($s));
+	}
+	public function base64url_decode($s) {
+   		return base64_decode(str_replace(array('-', '_', '.'), array('+', '/', '='), $s));
+	}
+	public function respond($http_response_code,$message){
+		http_response_code($http_response_code);
+		echo json_encode($message,JSON_PRETTY_PRINT);
+		die();
+	}
+	public function encrypt($plain){
+		$this->load->library('encrypt');
+		$key='shared-super-secret-key';
+		$cipher=$this->encrypt->encode($plain,$key);
+		
+		return $cipher;
+	}
+	public function encode($input){
+		return $this->base64url_encode($input);
+	}
+	public function decode($input){
+		return $this->base64url_decode($input);
+	}
+	public function decrypt($cipher){
+		$this->load->library('encrypt');
+		$key='shared-super-secret-key';
+		$plain=$this->encrypt->decode($cipher,$key);
+		
+		return $plain;
+	}
 }
