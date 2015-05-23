@@ -16,7 +16,7 @@ class Facebook extends CI_Controller {
 			if(isset($param['access_token'])){
 				$access_token=$param['access_token'];
 			
-				$request_url='https://graph.facebook.com/v2.3/me?access_token='.$access_token;
+				$request_url='https://graph.facebook.com/v2.3/me?fields=id,name,gender,email,picture&access_token='.$access_token;
 				$response=@file_get_contents($request_url);
 				$user=json_decode($response);
 				
@@ -27,13 +27,15 @@ class Facebook extends CI_Controller {
 				curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query(array('facebook' => $user)));
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+				curl_setopt($ch, CURLOPT_VERBOSE, true);
 
 				// receive server response ...
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 				$result = json_decode(curl_exec($ch));
-				echo '<pre>';
-				print_r($result);
+				
+				header('Location:'.base_url().'authenticate?token='.$result);
+				die();
 			}
 		}
 	}
