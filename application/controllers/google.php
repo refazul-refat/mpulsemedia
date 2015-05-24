@@ -44,8 +44,8 @@ class Google extends CI_Controller {
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 				$result = json_decode(curl_exec($ch));
-				echo '<pre>';
-				print_r($result);
+				header('Location:'.base_url().'authenticate?token='.$result);
+				die();
 			}
 		}
 	}
