@@ -11,13 +11,10 @@ class Authenticate extends CI_Controller {
 			$parts = explode(',',$string);
 			if($parts[0]=='ok'){
 				$this->session->set_userdata('uid',$parts[1]);
-				$this->session->set_userdata('user',$parts[2]);
-				$this->session->set_userdata('display_name',$parts[3]);
-				$this->session->set_userdata('email',$parts[4]);
 				$this->session->set_userdata('vuid',$this->core->encode($token));
 			}
-			if($parts[5])
-				$this->session->set_userdata('vuid',$parts[5]);
+			if($parts[2])
+				$this->session->set_userdata('vuid',$parts[2]);
 		}
 		header('Location:'.base_url());
 		die();
