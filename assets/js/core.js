@@ -543,3 +543,22 @@ function play(playlist){
 		});
 	});
 }
+
+var clock=setInterval(function(){
+	if($('.fallback').first().text()){
+		clearInterval(clock);
+		if($('#vuid').text()){
+			console.log($('#vuid').text());
+			$.ajax({
+				url:api_base+'merge',
+				method:'POST',
+				data:{auid:$('.fallback').first().text(),vuid:$('#vuid').text()},
+				dataType:'json',
+				success:function(response){
+					console.log(response);
+				}
+			});
+		}
+	}
+	console.log('merge waiting');
+},1000);
