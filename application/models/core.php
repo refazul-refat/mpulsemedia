@@ -26,7 +26,7 @@ class Core extends CI_Model {
 	}
 	public function encrypt($plain){
 		$this->load->library('encrypt');
-		$key='shared-super-secret-key';
+		$key='UIXA';
 		$cipher=$this->encrypt->encode($plain,$key);
 		
 		return $cipher;
@@ -39,7 +39,7 @@ class Core extends CI_Model {
 	}
 	public function decrypt($cipher){
 		$this->load->library('encrypt');
-		$key='shared-super-secret-key';
+		$key='UIXA';
 		$plain=$this->encrypt->decode($cipher,$key);
 		
 		return $plain;
